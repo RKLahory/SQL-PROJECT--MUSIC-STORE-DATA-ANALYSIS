@@ -1,0 +1,20 @@
+11.Write a query that determines the customer that has spent the most on music for each country. 
+   Write a query that returns the country along with the top customer and how much they spent.
+   For countries where the top amount spent is shared, provide all customers who spent this amount
+
+sol: select
+customer.customer_id,
+customer.first_name,
+customer.last_name,
+invoice.billing_country,
+sum(invoice_line.unit_price*invoice_line.quantity) as Total_spend,
+playlist.name as playlist_category
+from customer
+join invoice on invoice.customer_id= customer.customer_id
+join invoice_line on invoice.invoice_id = invoice_line.invoice_id
+join track on invoice_line.track_id = track.track_id
+join playlist_track on playlist_track.track_id = track.track_id
+join playlist on playlist_track.playlist_id = playlist.playlist_id
+where playlist.name = 'music'
+group by 1,2,3,4
+order by  5 desc ;
